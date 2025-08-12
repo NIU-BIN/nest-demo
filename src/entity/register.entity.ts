@@ -3,11 +3,10 @@ import { Product } from './product.entity'
 
 @Entity('t_register')
 export class Register {
-  @PrimaryGeneratedColumn({
-    type: 'int',
+  @PrimaryGeneratedColumn('uuid', {
     comment: '注册信息id',
   })
-  id: number;
+  id: string;
 
   @Column({
     type: 'varchar',

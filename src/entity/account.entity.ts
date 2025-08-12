@@ -1,10 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from 'typeorm';
 import { Order } from './order.entity';
 
 @Entity('t_account')
 export class Account {
-  @PrimaryGeneratedColumn({
-    type: 'int',
+  @PrimaryGeneratedColumn('uuid', {
     comment: '账户id',
   })
   id: number;
@@ -23,12 +22,12 @@ export class Account {
   })
   account_desc: string;
 
-  @Column({
-    type: 'varchar',
-    length: 255,
-    comment: '账户类别',
+  @CreateDateColumn({
+    type: 'datetime',
+    name: 'created_at',
+    comment: '开户时间',
   })
-  account_category: string;
+  createdAt: Date;
 
   @OneToMany(() => Order, (order) => order.account)
   orders: Order[];

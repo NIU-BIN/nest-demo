@@ -4,11 +4,10 @@ import { Order } from './order.entity'
 
 @Entity('t_product')
 export class Product {
-  @PrimaryGeneratedColumn({
-    type: 'int',
+  @PrimaryGeneratedColumn('uuid', {
     comment: '商品id',
   })
-  id: number;
+  id: string;
 
   @Column({
     type: 'varchar',
@@ -40,8 +39,10 @@ export class Product {
   product_price: number;
 
   // 一对一关系，表示一个产品对应一个注册信息
-  @OneToOne(() => Register, (register) => register.product)
-  @JoinColumn() // 表示这个实体将存储关联的外键
+  @OneToOne(() => Register)
+  @JoinColumn({
+    name: 'register_id',
+  }) // 表示这个实体将存储关联的外键
   register: Register;
 
   @ManyToMany(() => Order, (order) => order.products)
