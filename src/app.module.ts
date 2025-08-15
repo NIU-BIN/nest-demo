@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -7,6 +7,8 @@ import { Product } from './entity/product.entity';
 import { Register } from './entity/register.entity';
 import { Order } from './entity/order.entity'
 import { Account } from './entity/account.entity'
+import { TestMiddleware } from './common/test.middleware';
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
@@ -21,9 +23,17 @@ import { Account } from './entity/account.entity'
       synchronize: true, // 定义数据库表结构与实体类字段同步
     }),
     TypeOrmModule.forFeature([Product, Register, Order, Account]),
-    UserModule
+    UserModule,
+    TestModule
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TestMiddleware).forRoutes({
+      path: 'test', // 指定路由 test 才会生效，也可以指定所有的路由 .forRoutes('*')
+      method: RequestMethod.GET, // 指定路由 test 的请求方式
+    });
+  }
+}

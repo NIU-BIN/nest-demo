@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { TransformInterceptor } from './common/transform.interceptor';
+import { MonitorInterceptor } from './common/monitor.interceptor'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +14,8 @@ async function bootstrap() {
       stopAtFirstError: true, // 在第一个验证错误时停止验证
     }),
   );
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(new MonitorInterceptor());
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
